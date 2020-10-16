@@ -1,14 +1,15 @@
 CREATE TABLE `Entries` (
-        `id`,
-        `concept`,
-        `entry`,
-        `date`,
-        `moodId`
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `concept` TEXT NOT NULL,
+        `entry` TEXT NOT NULL,
+        `date` INTEGER NOT NULL,
+        `moodId` INTEGER NOT NULL,
+        FOREIGN KEY(`moodId`) REFERENCES `Moods`(`id`)
 );
 
 CREATE TABLE `Moods` (
-        `id`,
-        `label`
+  `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  `label` TEXT NOT NULL
 );
 
 
@@ -21,3 +22,11 @@ INSERT INTO `Moods` VALUES (1, 'Happy')
 INSERT INTO `Moods` VALUES (2, 'Sad')
 INSERT INTO `Moods` VALUES (3, 'Angry')
 INSERT INTO `Moods` VALUES (4, 'Ok')
+
+SELECT
+    a.id,
+    a.concept,
+    a.entry,
+    a.date,
+    a.moodId
+FROM Entries a
