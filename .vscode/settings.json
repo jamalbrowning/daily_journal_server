@@ -3,7 +3,7 @@
     {
       "previewLimit": 50,
       "driver": "SQLite",
-      "name": "Daily Journal",
+      "name": "daily_journal_server",
       "database": "${workspaceFolder:daily_journal}/dailyjournal.db"
     }
   ]
