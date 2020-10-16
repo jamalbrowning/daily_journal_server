@@ -3,6 +3,7 @@ CREATE TABLE `Entries` (
         `concept` TEXT NOT NULL,
         `entry` TEXT NOT NULL,
         `date` INTEGER NOT NULL,
+        `moodId` INTEGER NOT NULL,
         FOREIGN KEY(`moodId`) REFERENCES `Moods`(`id`)
 );
 
@@ -21,3 +22,11 @@ INSERT INTO `Moods` VALUES (1, 'Happy')
 INSERT INTO `Moods` VALUES (2, 'Sad')
 INSERT INTO `Moods` VALUES (3, 'Angry')
 INSERT INTO `Moods` VALUES (4, 'Ok')
+
+SELECT
+    a.id,
+    a.concept,
+    a.entry,
+    a.date,
+    a.moodId
+FROM Entries a
