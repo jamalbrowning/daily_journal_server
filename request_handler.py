@@ -1,8 +1,8 @@
-from entries.request import search_for_entry
+
 import json
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from entries import get_all_entries, get_single_entry, search_for_entry
+from entries import get_all_entries, get_single_entry, search_for_entry, delete_entry
 from moods import get_all_moods, get_single_mood
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -94,6 +94,14 @@ class HandleRequests(BaseHTTPRequestHandler):
     # It handles any PUT request.
     def do_PUT(self):
         self.do_POST()
+
+    def do_DELETE(self):
+        self._set_headers(204)
+
+        (resource, id) = self.parse_url(self.path)
+        if resource == "entries":
+            delete_entry(id)
+        self.wfile.write("".encode())
 
 
 # This function is not inside the class. It is the starting
