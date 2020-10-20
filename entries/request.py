@@ -56,7 +56,7 @@ def get_single_entry(id):
 
         return json.dumps(entry.__dict__)
 
-def search_for_entry(entry):
+def search_for_entry(search_term):
     with sqlite3.connect("./dailyjournal.db") as conn:
 
         conn.row_factory = sqlite3.Row
@@ -71,7 +71,7 @@ def search_for_entry(entry):
             a.moodId
         FROM entries a
         WHERE a.entry LIKE ?
-        """, ( '%'+entry+'%', ))
+        """, ( '%'+search_term+'%', ))
 
         entries = []
 

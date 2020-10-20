@@ -30,26 +30,21 @@ def get_all_moods():
 
     return json.dumps(moods)
 
-# def get_single_entry(id):
-#     with sqlite3.connect("./dailyjournal.db") as conn:
-#         conn.row_factory = sqlite3.Row
-#         db_cursor = conn.cursor()
+def get_single_mood(id):
+    with sqlite3.connect("./dailyjournal.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
 
-#         # Use a ? parameter to inject a variable's value
-#         # into the SQL statement.
-#         db_cursor.execute("""
-#         SELECT
-#             a.id,
-#             a.concept,
-#             a.entry,
-#             a.date,
-#             a.moodId
-#         FROM entries a
-#         WHERE a.id = ?
-#         """, ( id, ))
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.label
+        FROM moods a
+        WHERE a.id = ?
+        """, ( id, ))
 
-#         data = db_cursor.fetchone()
+        data = db_cursor.fetchone()
 
-#         entry = Entry(data['id'], data['concept'], data['entry'], data['date'], data['moodId'])
+        mood = Mood(data['id'], data['label'])
 
-#         return json.dumps(entry.__dict__)
+        return json.dumps(mood.__dict__)
