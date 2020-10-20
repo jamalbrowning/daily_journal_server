@@ -1,8 +1,9 @@
+from entries.request import search_for_entry
 import json
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from entries import get_all_entries, get_single_entry
-
+from entries import get_all_entries, get_single_entry, search_for_entry
+from moods import get_all_moods
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
         path_params = path.split("/")
@@ -40,6 +41,12 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
+    def do_OPTIONS(self):
+            self.send_response(200)
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+            self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
+            self.end_headers()
 
     def do_GET(self):
         self._set_headers(200)
@@ -56,9 +63,16 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_entry(id)}"
                 else:
                     response = f"{get_all_entries()}"
+            
+            if resource == "moods":
+                if id is not None:
+                    response = f"{get_all_moods()}"
 
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
+
+            if key == "q" and resource == "entries":
+                response = search_for_entry(value)
 
         self.wfile.write(response.encode())
 
