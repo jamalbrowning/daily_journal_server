@@ -30,3 +30,8 @@ SELECT
     a.date,
     a.moodId
 FROM Entries a
+
+SELECT
+    a.id,
+    a.label
+FROM Moods a

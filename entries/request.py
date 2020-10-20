@@ -55,3 +55,33 @@ def get_single_entry(id):
         entry = Entry(data['id'], data['concept'], data['entry'], data['date'], data['moodId'])
 
         return json.dumps(entry.__dict__)
+
+def search_for_entry(search_term):
+    with sqlite3.connect("./dailyjournal.db") as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.concept,
+            a.entry,
+            a.date,
+            a.moodId
+        FROM entries a
+        WHERE a.entry LIKE ?
+        """, ( '%'+search_term+'%', ))
+
+        entries = []
+
+        dataset = db_cursor.fetchall()
+
+
+        for row in dataset:
+
+            entry = Entry(row['id'], row['concept'], row['entry'], row['date'], row['moodId'])
+
+            entries.append(entry.__dict__)
+
+        return json.dumps(entries)
