@@ -28,8 +28,11 @@ SELECT
     a.concept,
     a.entry,
     a.date,
-    a.moodId
+    a.moodId,
+    m.label
 FROM Entries a
+JOIN Moods m
+      ON m.id = a.moodId
 
 SELECT
     a.id,

@@ -2,6 +2,7 @@ import sqlite3
 import json
 
 from models.entry import Entry
+from models.mood import Mood
 
 def get_all_entries():
     with sqlite3.connect("./dailyjournal.db") as conn:
@@ -15,8 +16,11 @@ def get_all_entries():
             a.concept,
             a.entry,
             a.date,
-            a.moodId
+            a.moodId,
+            m.label mood_label
         FROM entries a
+        JOIN moods m
+            ON m.id = a.moodId
         """)
 
         entries = []
@@ -28,6 +32,10 @@ def get_all_entries():
 
             entry = Entry(row['id'], row['concept'], row['entry'], row['date'], row['moodId'])
 
+            mood = Mood(row['moodId'], row['mood_label'])
+
+            entry.mood = mood.__dict__
+            
             entries.append(entry.__dict__)
 
     return json.dumps(entries)
