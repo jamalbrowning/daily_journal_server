@@ -2,7 +2,7 @@
 import json
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from entries import get_all_entries, get_single_entry, search_for_entry, delete_entry
+from entries import get_all_entries, get_single_entry, search_for_entry, delete_entry, new_journal_entry
 from moods import get_all_moods, get_single_mood
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -83,11 +83,17 @@ class HandleRequests(BaseHTTPRequestHandler):
     def do_POST(self):
         # Set response code to 'Created'
         self._set_headers(201)
-
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
-        response = f"received post request:<br>{post_body}"
-        self.wfile.write(response.encode())
+        
+        post_body = json.loads(post_body)
+
+        (resource, id) = self.parse_url(self.path)
+
+        if resource == "entries":
+            new_entry = None
+            new_entry = new_journal_entry(post_body)
+            self.wfile.write(f"{new_entry}".encode())
 
 
     # Here's a method on the class that overrides the parent's method.
